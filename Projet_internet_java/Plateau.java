@@ -7,7 +7,7 @@ public class Plateau extends JPanel {
 
 	private static final long serialVersionUID = 6726708245444190460L;
 
-	private static final int TAILLE=9;
+	private static final int TAILLE=10;
 
 	private Case caseActive;
 
