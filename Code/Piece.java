@@ -10,6 +10,23 @@ public class Piece {
 		this.couleur=couleur;
 	}
 	
+	public Couleur getCouleur() {
+		return couleur;
+	}
+
+	public void setCouleur(Couleur couleur) {
+		this.couleur = couleur;
+	}
+	
+	public Couleur opposeCouleur() {
+		if (couleur==Couleur.Blanc) {
+			return Couleur.Noir;
+		}
+		else {
+			return Couleur.Blanc;
+		}
+	}
+	
 	public void dessinerPiece(Graphics g, int x, int y,int TAILLE,int taille) {
 		switch(couleur) {
 		case Blanc : 
