@@ -3,23 +3,26 @@ import javax.swing.*;
 
 public class Case extends JPanel{
 
+	private Damier damier;
 	private Couleur couleur;
 	private Piece piece;
 	private boolean saut;
 	private boolean clique;
 	private boolean possibleClique;
 	
-	public Case(Couleur couleur) {
+	public Case(Couleur couleur, Damier damier) {
 		super();
 		this.couleur=couleur;
 		piece = null;
 		clique = false;
+		this.damier = damier;
 	}
 	
-	public Case(Couleur couleurCase, Couleur couleurPiece) {
+	public Case(Couleur couleurCase, Couleur couleurPiece, Damier damier) {
 		super();
+		this.damier = damier;
 		this.couleur=couleurCase;
-		piece = new Piece(couleurPiece);
+		piece = new Reine(couleurPiece);
 		clique = false;
 		possibleClique = false;
 		saut = false;
@@ -75,7 +78,14 @@ public class Case extends JPanel{
 			break;
 		}
 		if (clique) {
-			//g.setColor(Color.yellow);
+			if (piece!=null) {
+				if ( ((damier.getTourBlanc())&&(piece.getCouleur()==Couleur.Blanc)) || ((!damier.getTourBlanc())&&(piece.getCouleur()==Couleur.Noir)) ) {
+					g.setColor(Color.green);
+				}
+				else {
+					g.setColor(Color.red);
+				}
+			}
 		}
 		if (saut) {
 			g.setColor(new Color(255,150,150));

@@ -3,6 +3,7 @@ import java.awt.Graphics;
 
 public class Piece {
 
+	private Damier damier;
 	private Couleur couleur;
 	
 	public Piece(Couleur couleur) {
@@ -37,5 +38,9 @@ public class Piece {
 			break;
 		}
 		g.fillOval(x+TAILLE/taille/20,y+TAILLE/taille/20,TAILLE/taille*9/10,TAILLE/taille*9/10);   //fois 9/10 pour que la taille de la pièce soit un peu plus petite que la case
+		if (this instanceof Reine) {
+			g.setColor(Color.RED);
+			g.fillOval(x+TAILLE/taille/20*5,y+TAILLE/taille/20*5,TAILLE/taille*5/10,TAILLE/taille*5/10);
+		}
 	}
 }

@@ -1,9 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Pion extends Piece{
+public class Reine extends Piece{
 
-	public Pion(Couleur couleur) {
+	public Reine(Couleur couleur) {
 		super(couleur);
 	}
 	

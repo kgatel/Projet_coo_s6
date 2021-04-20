@@ -35,12 +35,14 @@ public class Souris implements MouseListener {
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		//System.out.println("clique on x:"+arg0.getX()*damier.getTaille()/damier.getTAILLE()+", y: "+(arg0.getY()-39)*damier.getTaille()/damier.getTAILLE());
-			
+		int ii=0,jj=0; //coordoonées du pion avant déplacement
+		
 		int x = arg0.getX()*damier.getTaille()/damier.getTAILLE();
 		int y = (arg0.getY()-39)*damier.getTaille()/damier.getTAILLE();
 		
 		if (damier.getSautMultiple()&&(!damier.getGrille()[x][y].getSaut())) {
 			//ne rien faire tant que le pion ne mange pas l'autre pion
+			System.out.println("Vous avez obligation de manger le pion");
 		}
 		else {
 			damier.setSautMultiple(false);
@@ -55,12 +57,15 @@ public class Souris implements MouseListener {
 							damier.getGrille()[i][j].setSaut(false);
 						}
 						if (damier.getGrille()[i][j].getClique()){
+							ii=i;
+							jj=j;
 							damier.getGrille()[i][j].setClique(false);
 						}
 					}
 				}
 				this.damier.getGrille()[x][y].click();			
 				this.damier.afficherDeplacement(x,y);
+				
 			}
 			
 			else {
@@ -75,10 +80,14 @@ public class Souris implements MouseListener {
 							if (damier.getGrille()[i][j].getSaut()==true) {
 								damier.getGrille()[i][j].setSaut(false);
 							}
+							if (damier.getGrille()[i][j].getClique()){
+								ii=i;
+								jj=j;
+							}
 						}
 					}
 					
-					this.damier.deplacer(x,y);   //selection de la case où la pièce veut bouger
+					this.damier.deplacer(x,y,this.damier.getGrille()[ii][jj].getPiece() instanceof Reine);   //selection de la case où la pièce veut bouger
 				}
 			}
 			
