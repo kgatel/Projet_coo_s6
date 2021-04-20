@@ -77,6 +77,9 @@ public class Case extends JPanel{
 		if (clique) {
 			//g.setColor(Color.yellow);
 		}
+		if (saut) {
+			g.setColor(new Color(255,150,150));
+		}
 		if (possibleClique) {
 			g.setColor(new Color(150,150,255));
 		}

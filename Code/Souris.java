@@ -41,26 +41,36 @@ public class Souris implements MouseListener {
 
 		if ((damier.getGrille()[x][y].getPossibleClique()==false)&&(damier.getGrille()[x][y].getSaut()==false) ) {  //selection de la pièce à bouger
 			
-			for (int j=0;j<damier.getTaille();j++) {   //permet d'effacer l'ancien clique
+			for (int j=0;j<damier.getTaille();j++) {   //renitialise tout
 				for (int i=0;i<damier.getTaille();i++) {
-					if (damier.getGrille()[i][j].getPossibleClique()==true) {
+					if (damier.getGrille()[i][j].getPossibleClique()) {
 						damier.getGrille()[i][j].setPossibleClique(false);
 					}
-					if (damier.getGrille()[i][j].getClique()==true){
-						damier.getGrille()[i][j].click();
+					if (damier.getGrille()[i][j].getSaut()) {
+						damier.getGrille()[i][j].setSaut(false);
+					}
+					if (damier.getGrille()[i][j].getClique()){
+						damier.getGrille()[i][j].setClique(false);
 					}
 				}
 			}
 			this.damier.getGrille()[x][y].click();			
-			this.damier.afficherDeplacement();
+			this.damier.afficherDeplacement(x,y);
 		}
 		
 		else {
-			if (damier.getGrille()[x][y].getSaut()==true) {
-				damier.getGrille()[x][y].setSaut(true);
+			for (int j=0;j<damier.getTaille();j++) {   //renitialise tous les sauts
+				for (int i=0;i<damier.getTaille();i++) {
+					if (damier.getGrille()[i][j].getSaut()==true) {
+						damier.getGrille()[i][j].setSaut(false);
+				//damier.getGrille()[x][y].click();	
+					}
+				}
 			}
-			this.damier.deplacer(x,y,damier.getTourBlanc());   //selection de la case où la pièce veut bouger
+			
+			this.damier.deplacer(x,y);   //selection de la case où la pièce veut bouger
 		}
+		//System.out.println(damier.getGrille()[x][y].getPiece()==null);
 		this.damier.repaint();
 		
 	}
