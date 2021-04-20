@@ -8,14 +8,15 @@ public class Damier extends JPanel{
 	private int taille; //taille=8 pour un plateau 8*8 par exemple
 	private Case[][] grille;  //tableau de cases
 	private boolean tourBlanc;  //savoir à qui est le tour
-	private boolean saut;	//savoir si le joueur est dans une situation de saut multiple ou non
-
+	private boolean sautObligatoire;	//savoir si le joueur est dans une situation de saut multiple ou non
+	private boolean sautMultiple;
 
 	public Damier(int TAILLE,int taille) {
 		this.TAILLE=TAILLE;
 		this.taille=taille;
 		this.tourBlanc=true;
-		this.saut=false;
+		this.sautObligatoire=false;
+		this.sautMultiple=false;
 		this.grille = new Case[taille][taille];
 		for (int i=0; i<taille; i++) {
 			for (int j=0; j<taille; j++) {
@@ -39,12 +40,20 @@ public class Damier extends JPanel{
 		}
 	}
 	
-	public boolean getSaut() {
-		return saut;
+	public boolean getSautMultiple() {
+		return sautMultiple;
 	}
 
-	public void setSaut(boolean saut) {
-		this.saut = saut;
+	public void setSautMultiple(boolean sautMultiple) {
+		this.sautMultiple = sautMultiple;
+	}
+
+	public boolean getSautObligatoire() {
+		return sautObligatoire;
+	}
+
+	public void setSautObligatoire(boolean sautObligatoire) {
+		this.sautObligatoire = sautObligatoire;
 	}
 
 	public int getTaille() {
@@ -66,10 +75,6 @@ public class Damier extends JPanel{
 	public void setTourBlanc(boolean tourBlanc) {
 		this.tourBlanc = tourBlanc;
 	}
-
-	public void afficherSaut(int x, int y) {
-		
-	}
 		
 	public void afficherDeplacement(int i, int j) {
 		if (grille[i][j].getPiece()!=null) {  //repère la case cliquée
@@ -84,7 +89,8 @@ public class Damier extends JPanel{
 						if (grille[i+1][j-1].getPiece().getCouleur()==Couleur.Noir) {
 							if ((i<taille-2)&&(j>1)) {
 								if (grille[i+2][j-2].getPiece()==null) {  //saut de pion
-									grille[i+2][j-2].setSaut(true);							
+									grille[i+2][j-2].setSaut(true);	
+									this.setSautObligatoire(true);  //indique qu'il y a un saut à faire
 								}
 							}
 						}
@@ -99,6 +105,7 @@ public class Damier extends JPanel{
 							if ((i>1)&&(j>1)) {
 								if (grille[i-2][j-2].getPiece()==null) {
 									grille[i-2][j-2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -111,6 +118,7 @@ public class Damier extends JPanel{
 							if ((i>1)&&(j<taille-2)) {
 								if (grille[i-2][j+2].getPiece()==null) {
 									grille[i-2][j+2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -122,6 +130,7 @@ public class Damier extends JPanel{
 							if ((i<taille-2)&&(j<taille-2)) {
 								if (grille[i+2][j+2].getPiece()==null) {
 									grille[i+2][j+2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -140,6 +149,7 @@ public class Damier extends JPanel{
 							if ((i<taille-2)&&(j<taille-2)) {
 								if (grille[i+2][j+2].getPiece()==null) {
 									grille[i+2][j+2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -154,17 +164,20 @@ public class Damier extends JPanel{
 							if ((i>1)&&(j<taille-2)) {
 								if (grille[i-2][j+2].getPiece()==null) {
 									grille[i-2][j+2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
 					}
 				}
+				//depassement en arrière pour pièces noires
 				if ((i>0)&&(j>0)) {
 					if (grille[i-1][j-1].getPiece()!=null) {
 						if (grille[i-1][j-1].getPiece().getCouleur()==Couleur.Blanc) {
 							if ((i>1)&&(j>1)) {
 								if (grille[i-2][j-2].getPiece()==null) {
 									grille[i-2][j-2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -176,6 +189,7 @@ public class Damier extends JPanel{
 							if ((i<taille-2)&&(j>1)) {
 								if (grille[i+2][j-2].getPiece()==null) {
 									grille[i+2][j-2].setSaut(true);
+									this.setSautObligatoire(true);
 								}
 							}
 						}
@@ -188,7 +202,7 @@ public class Damier extends JPanel{
 	
 	public void deplacer(int x, int y) {
 		Coordonnees c = new Coordonnees(); //coordonnées de la pièce sautée
-		boolean b=false; 
+		boolean b=false,b0=false; 
 		int ii=0,jj=0; //coordonnées du pion avant déplacement
 		
 		if (tourBlanc) {	//piece blanche
@@ -228,9 +242,48 @@ public class Damier extends JPanel{
 		}
 		
 		if (b!=true) {	//s'il le pion ne peut pas sauter d'autre pion après avoir sauté alors tour suivant
+			this.setSautObligatoire(this.peutEtreMange(x,y));
 			changementTour();
 		}
+		else {
+			this.setSautMultiple(true);
+		}
 		
+	}
+	
+	public boolean peutEtreMange(int x, int y) {
+		boolean b = false;
+		if ((x-1>=0)&&(x+1<taille)&&(y-1>=0)&&(y+1<taille)) {
+			if (grille[x-1][y-1].getPiece()!=null) {
+				if (  ((grille[x-1][y-1].getPiece().getCouleur()==Couleur.Blanc)&&(!this.tourBlanc)) || ((grille[x-1][y-1].getPiece().getCouleur()==Couleur.Noir)&&(this.tourBlanc))  ) {
+					if (grille[x+1][y+1].getPiece()==null) {	//espace libre
+						b=true;
+					}
+				}
+			}
+			if (grille[x-1][y+1].getPiece()!=null) {
+				if (  ((grille[x-1][y+1].getPiece().getCouleur()==Couleur.Blanc)&&(!this.tourBlanc)) || ((grille[x-1][y+1].getPiece().getCouleur()==Couleur.Noir)&&(this.tourBlanc))  ) {
+					if (grille[x+1][y-1].getPiece()==null) {	//espace libre
+						b=true;
+					}
+				}
+			}
+			if (grille[x+1][y-1].getPiece()!=null) {
+				if (  ((grille[x+1][y-1].getPiece().getCouleur()==Couleur.Blanc)&&(!this.tourBlanc)) || ((grille[x+1][y-1].getPiece().getCouleur()==Couleur.Noir)&&(this.tourBlanc))  ) {
+					if (grille[x-1][y+1].getPiece()==null) {	//espace libre
+						b=true;
+					}
+				}
+			}
+			if (grille[x+1][y+1].getPiece()!=null) {
+				if (  ((grille[x+1][y+1].getPiece().getCouleur()==Couleur.Blanc)&&(!this.tourBlanc)) || ((grille[x+1][y+1].getPiece().getCouleur()==Couleur.Noir)&&(this.tourBlanc))  ) {
+					if (grille[x-1][y-1].getPiece()==null) {	//espace libre
+						b=true;
+					}
+				}
+			}
+		}
+		return b;
 	}
 	
 	public boolean sautPossible(int x, int y) {

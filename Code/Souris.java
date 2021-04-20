@@ -38,41 +38,53 @@ public class Souris implements MouseListener {
 			
 		int x = arg0.getX()*damier.getTaille()/damier.getTAILLE();
 		int y = (arg0.getY()-39)*damier.getTaille()/damier.getTAILLE();
-
-		if ((damier.getGrille()[x][y].getPossibleClique()==false)&&(damier.getGrille()[x][y].getSaut()==false) ) {  //selection de la pièce à bouger
-			
-			for (int j=0;j<damier.getTaille();j++) {   //renitialise tout
-				for (int i=0;i<damier.getTaille();i++) {
-					if (damier.getGrille()[i][j].getPossibleClique()) {
-						damier.getGrille()[i][j].setPossibleClique(false);
-					}
-					if (damier.getGrille()[i][j].getSaut()) {
-						damier.getGrille()[i][j].setSaut(false);
-					}
-					if (damier.getGrille()[i][j].getClique()){
-						damier.getGrille()[i][j].setClique(false);
-					}
-				}
-			}
-			this.damier.getGrille()[x][y].click();			
-			this.damier.afficherDeplacement(x,y);
-		}
 		
+		if (damier.getSautMultiple()&&(!damier.getGrille()[x][y].getSaut())) {
+			//ne rien faire tant que le pion ne mange pas l'autre pion
+		}
 		else {
-			for (int j=0;j<damier.getTaille();j++) {   //renitialise tous les sauts
-				for (int i=0;i<damier.getTaille();i++) {
-					if (damier.getGrille()[i][j].getSaut()==true) {
-						damier.getGrille()[i][j].setSaut(false);
-				//damier.getGrille()[x][y].click();	
+			damier.setSautMultiple(false);
+			if ((damier.getGrille()[x][y].getPossibleClique()==false)&&(damier.getGrille()[x][y].getSaut()==false) ) {  //selection de la pièce à bouger
+				
+				for (int j=0;j<damier.getTaille();j++) {   //rénitialise tout
+					for (int i=0;i<damier.getTaille();i++) {
+						if (damier.getGrille()[i][j].getPossibleClique()) {
+							damier.getGrille()[i][j].setPossibleClique(false);
+						}
+						if (damier.getGrille()[i][j].getSaut()) {
+							damier.getGrille()[i][j].setSaut(false);
+						}
+						if (damier.getGrille()[i][j].getClique()){
+							damier.getGrille()[i][j].setClique(false);
+						}
 					}
+				}
+				this.damier.getGrille()[x][y].click();			
+				this.damier.afficherDeplacement(x,y);
+			}
+			
+			else {
+				
+				if ( (damier.getSautObligatoire())&&(!damier.getGrille()[x][y].getSaut()) ){
+					//ne rien faire tant que le saut n'est pas effectué
+				}
+				else {
+					damier.setSautObligatoire(false);
+					for (int j=0;j<damier.getTaille();j++) {   //renitialise tous les sauts
+						for (int i=0;i<damier.getTaille();i++) {
+							if (damier.getGrille()[i][j].getSaut()==true) {
+								damier.getGrille()[i][j].setSaut(false);
+							}
+						}
+					}
+					
+					this.damier.deplacer(x,y);   //selection de la case où la pièce veut bouger
 				}
 			}
 			
-			this.damier.deplacer(x,y);   //selection de la case où la pièce veut bouger
 		}
-		//System.out.println(damier.getGrille()[x][y].getPiece()==null);
 		this.damier.repaint();
-		
+	
 	}
 
 	@Override
