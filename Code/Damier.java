@@ -4,6 +4,7 @@ import javax.swing.*;
 
 public class Damier extends JPanel{
 	
+	private JFrame frame;
 	private int TAILLE; //taille de la fenêtre
 	private int taille; //taille=8 pour un plateau 8*8 par exemple
 	private Case[][] grille;  //tableau de cases
@@ -11,14 +12,18 @@ public class Damier extends JPanel{
 	private boolean sautObligatoire;	//savoir si le joueur a un saut obligatoire
 	private boolean sautMultiple;	//savoir si le joueur est dans une situation de saut multiple ou non
 	private boolean obligerLesSauts;
+	private boolean sauterNEstPasJoue;
 	
-	public Damier(int TAILLE,int taille,boolean obligerLesSauts) {
+	
+	public Damier(JFrame frame,int TAILLE,int taille,boolean obligerLesSauts,boolean sauterNEstPasJoue) {
+		this.frame=frame;
 		this.TAILLE=TAILLE;
 		this.taille=taille;
 		this.tourBlanc=true;
 		this.sautObligatoire=false;
 		this.sautMultiple=false;
 		this.obligerLesSauts=obligerLesSauts;
+		this.sauterNEstPasJoue=sauterNEstPasJoue;
 		this.grille = new Case[taille][taille];
 		for (int i=0; i<taille; i++) {
 			for (int j=0; j<taille; j++) {
@@ -42,6 +47,14 @@ public class Damier extends JPanel{
 		}
 	}
 	
+	public boolean getSauterNEstPasJoue() {
+		return sauterNEstPasJoue;
+	}
+
+	public void setSauterNEstPasJoue(boolean sauterNEstPasJoue) {
+		this.sauterNEstPasJoue = sauterNEstPasJoue;
+	}
+
 	public boolean getSautMultiple() {
 		return sautMultiple;
 	}
@@ -457,18 +470,15 @@ public class Damier extends JPanel{
 						}
 					}
 					
-					
 				}
-				
-				
-				
+								
 			}
 		}
 	}
 	
 	public void deplacer(int x, int y, boolean reine) {
 		Coordonnees c = new Coordonnees(); //coordonnées de la pièce sautée
-		boolean b=false; 
+		boolean b=false;
 		int ii=0,jj=0; //coordonnées du pion avant déplacement
 		
 		if (tourBlanc) {	//piece blanche
@@ -500,6 +510,8 @@ public class Damier extends JPanel{
 			}
 		}
 		grille[ii][jj].click();
+		boolean pion;
+		pion=(grille[ii][jj].getPiece() instanceof Pion);
 		grille[ii][jj].setPiece(null);
 //		System.out.println(ii+" "+jj);
 //		System.out.println(x+" "+y);
@@ -510,7 +522,9 @@ public class Damier extends JPanel{
 		
 		if (c.getX()!=-1) {		//il y a eu une pièce mangée
 			grille[c.getX()][c.getY()].setPiece(null);  //enlever la pièce mangée
-			b = sautPossible(x,y);		//calculer les sauts de pion possibles après déplacement
+			if (!( (pion)&&(grille[x][y].getPiece() instanceof Reine) )){   //vérifier qu'il ne peut pas continuer à manger s'il vient d'obtenir une reine
+				b = sautPossible(x,y);		//calculer les sauts de pion possibles après déplacement
+			}
 		}
 		
 		if (b!=true) {	//s'il le pion ne peut pas sauter d'autre pion après avoir sauté alors tour suivant
@@ -518,6 +532,16 @@ public class Damier extends JPanel{
 				this.setSautObligatoire(this.peutEtreMange(x,y));
 			}
 			changementTour();
+			if (partieFinie()) {
+				frame.dispose();
+				System.out.println();
+				if (tourBlanc) {
+					System.out.println("Les noirs ont remporté la partie");
+				}
+				else {
+					System.out.println("Les blancs ont remporté la partie");
+				}
+			}
 		}
 		else {
 			this.setSautMultiple(true);
@@ -631,7 +655,16 @@ public class Damier extends JPanel{
 	
 	public boolean sautPossible(int x, int y) {
 		boolean b=false;
-		if ( (x-2>=0) && (y-2>=0) ) {	//diagonale haute gauche
+		boolean pionRencontre=false;
+		int k=1,l=1;
+		while ( (x-k>=0) && (y-k>=0) && (!pionRencontre) ) {	//diagonale haute gauche
+			if (grille[x-k][y-k].getPiece()!=null) {
+				pionRencontre=true;
+			}
+			k++;
+		}
+		k--;
+		if ( (x-2>=0) && (y-2>=0) ) {		// pour un pion
 			if ( (grille[x-2][y-2].getPiece()==null) && (grille[x-1][y-1].getPiece()!=null) ) {
 				if ( ((grille[x-1][y-1].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x-1][y-1].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
 					grille[x-2][y-2].setSaut(true);
@@ -640,7 +673,32 @@ public class Damier extends JPanel{
 				}
 			}
 		}
-		if ( (x+2<taille) && (y-2>=0) ) {	//diagonale haute droite
+		pionRencontre=false;
+		if (grille[x][y].getPiece() instanceof Reine) {
+			while ((x-k-l>=0) && (y-k-l>=0) && (!pionRencontre)) {
+				if (grille[x-k-l][y-k-l].getPiece()!=null) {
+					pionRencontre=true;
+				}
+				else {
+					if ( ((grille[x-k][y-k].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x-k][y-k].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
+						grille[x-k-l][y-k-l].setSaut(true);
+						grille[x][y].setClique(true);
+						b=true;
+					}
+				}
+				l++;
+			}
+		}
+		k=1;l=1;pionRencontre=false;
+		
+		while ( (x+k<taille) && (y-k>=0) && (!pionRencontre) ) {	//diagonale haute droite
+			if (grille[x+k][y-k].getPiece()!=null) {
+				pionRencontre=true;
+			}
+			k++;
+		}
+		k--;
+		if ( (x+2<taille) && (y-2>=0) ) {		// pour un pion
 			if ( (grille[x+2][y-2].getPiece()==null) && (grille[x+1][y-1].getPiece()!=null) ) {
 				if ( ((grille[x+1][y-1].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x+1][y-1].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
 					grille[x+2][y-2].setSaut(true);
@@ -649,7 +707,33 @@ public class Damier extends JPanel{
 				}
 			}
 		}
-		if ( (x+2<taille) && (y+2<taille) ) {	//diagonale basse droite
+		pionRencontre=false;
+		if (grille[x][y].getPiece() instanceof Reine) {
+			while ((x+k+l<taille) && (y-k-l>=0) && (!pionRencontre)) {
+				if (grille[x+k+l][y-k-l].getPiece()!=null) {
+					pionRencontre=true;
+				}
+				else {
+					if ( ((grille[x+k][y-k].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x+k][y-k].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
+						grille[x+k+l][y-k-l].setSaut(true);
+						grille[x][y].setClique(true);
+						b=true;
+					}
+				}
+				l++;
+			}
+		}
+		
+		k=1;l=1;pionRencontre=false;
+		
+		while ( (x+k<taille) && (y+k<taille) && (!pionRencontre) ) {	//diagonale basse droite
+			if (grille[x+k][y+k].getPiece()!=null) {
+				pionRencontre=true;
+			}
+			k++;
+		}
+		k--;
+		if ( (x+2<taille) && (y+2<taille) ) {		// pour un pion
 			if ( (grille[x+2][y+2].getPiece()==null) && (grille[x+1][y+1].getPiece()!=null) ) {
 				if ( ((grille[x+1][y+1].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x+1][y+1].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
 					grille[x+2][y+2].setSaut(true);
@@ -658,13 +742,55 @@ public class Damier extends JPanel{
 				}
 			}
 		}
-		if ( (x-2>=0) && (y+2<taille) ) {	//diagonale basse gauche
+		pionRencontre=false;
+		if (grille[x][y].getPiece() instanceof Reine) {
+			while ((x+k+l<taille) && (y+k+l<taille) && (!pionRencontre)) {
+				if (grille[x+k+l][y+k+l].getPiece()!=null) {
+					pionRencontre=true;
+				}
+				else {
+					if ( ((grille[x+k][y+k].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x+k][y+k].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
+						grille[x+k+l][y+k+l].setSaut(true);
+						grille[x][y].setClique(true);
+						b=true;
+					}
+				}
+				l++;
+			}
+		}
+		
+		k=1;l=1;pionRencontre=false;
+		
+		while ( (x-k>=0) && (y+k<taille) && (!pionRencontre) ) {	//diagonale basse gauche
+			if (grille[x-k][y+k].getPiece()!=null) {
+				pionRencontre=true;
+			}
+			k++;
+		}
+		k--;
+		if ( (x-2>=0) && (y+2<taille) ) {		// pour un pion
 			if ( (grille[x-2][y+2].getPiece()==null) && (grille[x-1][y+1].getPiece()!=null) ) {
 				if ( ((grille[x-1][y+1].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x-1][y+1].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
 					grille[x-2][y+2].setSaut(true);
 					grille[x][y].setClique(true);
 					b=true;
 				}
+			}
+		}
+		pionRencontre=false;
+		if (grille[x][y].getPiece() instanceof Reine) {
+			while ((x-k-l>=0) && (y+k+l<taille) && (!pionRencontre)) {
+				if (grille[x-k-l][y+k+l].getPiece()!=null) {
+					pionRencontre=true;
+				} 
+				else {
+					if ( ((grille[x-k][y+k].getPiece().getCouleur()==Couleur.Blanc)&&(!tourBlanc)) || ((grille[x-k][y+k].getPiece().getCouleur()==Couleur.Noir)&&(tourBlanc)) )  {
+						grille[x-k-l][y+k+l].setSaut(true);
+						grille[x][y].setClique(true);
+						b=true;
+					}
+				}
+				l++;
 			}
 		}
 		
@@ -724,6 +850,138 @@ public class Damier extends JPanel{
 		return c;
 	}
 	
+	public boolean partieFinie() {
+		boolean b=true;
+		boolean peutBouger=false;
+		for (int i=0; i<taille;i++) {
+			for (int j=0;j<taille;j++) {
+				if (grille[i][j].getPiece()!=null) {
+					if (((grille[i][j].getPiece().getCouleur()==Couleur.Blanc)&&(tourBlanc))||((grille[i][j].getPiece().getCouleur()==Couleur.Noir)&&(!tourBlanc))) {
+						b=false;
+					}
+				}
+			}
+		}
+		if (b==false) {
+			for (int i=0; i<taille;i++) {
+				for (int j=0;j<taille;j++) {
+					if (grille[i][j].getPiece()!=null) {
+						if ((tourBlanc)&&(grille[i][j].getPiece().getCouleur()==Couleur.Blanc)) {	//tour au blanc
+							if ((i<taille-1)&&(j>0)) {	  //diagonale haute droite
+								if (grille[i+1][j-1].getPiece()==null) {	//
+									peutBouger=true;
+								}
+								else{
+									if (grille[i+1][j-1].getPiece().getCouleur()==Couleur.Noir) {
+										if ((i<taille-2)&&(j>1)) {
+											if (grille[i+2][j-2].getPiece()==null) {  //saut de pion
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							if ((i>0)&&(j>0)) {		//diagonale haute gauche
+								if (grille[i-1][j-1].getPiece()==null) {
+									peutBouger=true;
+								}
+								else {
+									if (grille[i-1][j-1].getPiece().getCouleur()==Couleur.Noir) {
+										if ((i>1)&&(j>1)) {
+											if (grille[i-2][j-2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							//situation ou le pion mange en arrière
+							if ((i>0)&&(j<taille-1)) {
+								if (grille[i-1][j+1].getPiece()!=null) {
+									if (grille[i-1][j+1].getPiece().getCouleur()==Couleur.Noir) {
+										if ((i>1)&&(j<taille-2)) {
+											if (grille[i-2][j+2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							if ((i<taille-1)&&(j<taille-1)) {
+								if (grille[i+1][j+1].getPiece()!=null) {
+									if (grille[i+1][j+1].getPiece().getCouleur()==Couleur.Noir) {
+										if ((i<taille-2)&&(j<taille-2)) {
+											if (grille[i+2][j+2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+						}
+						if ((!tourBlanc)&&(grille[i][j].getPiece().getCouleur()==Couleur.Noir)) {  //tour noir
+							
+							if ((i<taille-1)&&(j<taille-1)) {
+								if (grille[i+1][j+1].getPiece()==null) {
+									peutBouger=true;								}
+								else{
+									if (grille[i+1][j+1].getPiece().getCouleur()==Couleur.Blanc) {
+										if ((i<taille-2)&&(j<taille-2)) {
+											if (grille[i+2][j+2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							if ((i>0)&&(j<taille-1)) {
+								if (grille[i-1][j+1].getPiece()==null) {
+									peutBouger=true;								}
+								else{
+									if (grille[i-1][j+1].getPiece().getCouleur()==Couleur.Blanc) {
+										if ((i>1)&&(j<taille-2)) {
+											if (grille[i-2][j+2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							//depassement en arrière pour pièces noires
+							if ((i>0)&&(j>0)) {
+								if (grille[i-1][j-1].getPiece()!=null) {
+									if (grille[i-1][j-1].getPiece().getCouleur()==Couleur.Blanc) {
+										if ((i>1)&&(j>1)) {
+											if (grille[i-2][j-2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+							if ((i<taille-1)&&(j>0)) {
+								if (grille[i+1][j-1].getPiece()!=null) {
+									if (grille[i+1][j-1].getPiece().getCouleur()==Couleur.Blanc) {
+										if ((i<taille-2)&&(j>1)) {
+											if (grille[i+2][j-2].getPiece()==null) {
+												peutBouger=true;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (peutBouger==false) {
+			System.out.println("Plus aucun déplacement possible");
+			b=true;
+		}
+		return b;
+	}
+	
 	public void changementTour() {
 		this.tourBlanc=!tourBlanc;
 	}
@@ -736,8 +994,7 @@ public class Damier extends JPanel{
 			return -a;
 		}
 	}
-	
-	
+		
 	public void paint(Graphics g) {
 	//cases
 		for (int i=0; i<taille; i++) {
@@ -749,7 +1006,5 @@ public class Damier extends JPanel{
 			}
 		}
 	}
-	
-	
 	
 }

@@ -4,13 +4,11 @@ import javax.swing.*;
 
 public class Souris implements MouseListener {
 
-//	private Case case0;
 	private Damier damier;
+	private JFrame frame;
 	
-//	public Souris(Case case0,Damier damier) {
 	public Souris(Damier damier) {
 		super();
-//		this.case0 = case0;
 		this.damier = damier;
 	}
 	
@@ -34,7 +32,6 @@ public class Souris implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		//System.out.println("clique on x:"+arg0.getX()*damier.getTaille()/damier.getTAILLE()+", y: "+(arg0.getY()-39)*damier.getTaille()/damier.getTAILLE());
 		int ii=0,jj=0; //coordoonées du pion avant déplacement
 		
 		int x = arg0.getX()*damier.getTaille()/damier.getTAILLE();
@@ -42,7 +39,7 @@ public class Souris implements MouseListener {
 		
 		if (damier.getSautMultiple()&&(!damier.getGrille()[x][y].getSaut())) {
 			//ne rien faire tant que le pion ne mange pas l'autre pion
-			System.out.println("Vous avez obligation de manger le pion");
+			System.out.println("Vous devez manger le pion");
 		}
 		else {
 			damier.setSautMultiple(false);
@@ -72,6 +69,7 @@ public class Souris implements MouseListener {
 				
 				if ( (damier.getSautObligatoire())&&(!damier.getGrille()[x][y].getSaut()) ){
 					//ne rien faire tant que le saut n'est pas effectué
+					System.out.println("Vous avez obligation de manger");
 				}
 				else {
 					damier.setSautObligatoire(false);
@@ -99,7 +97,6 @@ public class Souris implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-//		System.out.println("released");
 	}
 
 }

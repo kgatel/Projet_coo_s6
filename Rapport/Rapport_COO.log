@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.10.7)  16 APR 2021 12:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.11.3)  21 APR 2021 21:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -77,9 +77,9 @@ File: babel.def 2020/02/14 3.40 Babel common definitions
 \bbl@dirlevel=\count180
 )
 Package babel Info: \l@acadian = using hyphenrules for french
-(babel)             (\language37) on input line 91.
+(babel)             (\language53) on input line 91.
 Package babel Info: \l@canadien = using hyphenrules for french
-(babel)             (\language37) on input line 92.
+(babel)             (\language53) on input line 92.
 \FB@nonchar=\count181
 Package babel Info: Making : an active character on input line 419.
 Package babel Info: Making ; an active character on input line 420.
@@ -711,7 +711,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 114.
 Here is how much of TeX's memory you used:
  14681 strings out of 481239
  231788 string characters out of 5920377
- 558915 words of memory out of 5000000
+ 558914 words of memory out of 5000000
  29700 multiletter control sequences out of 15000+600000
  542528 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
