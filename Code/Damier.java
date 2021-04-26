@@ -13,9 +13,11 @@ public class Damier extends JPanel{
 	private boolean sautMultiple;	//savoir si le joueur est dans une situation de saut multiple ou non
 	private boolean obligerLesSauts;
 	private boolean sauterNEstPasJoue;
+	private Joueur joueur1;
+	private Joueur joueur2;
+
 	
-	
-	public Damier(JFrame frame,int TAILLE,int taille,boolean obligerLesSauts,boolean sauterNEstPasJoue) {
+	public Damier(JFrame frame,int TAILLE,int taille,boolean obligerLesSauts,boolean sauterNEstPasJoue,Joueur joueur1,Joueur joueur2) {
 		this.frame=frame;
 		this.TAILLE=TAILLE;
 		this.taille=taille;
@@ -24,6 +26,8 @@ public class Damier extends JPanel{
 		this.sautMultiple=false;
 		this.obligerLesSauts=obligerLesSauts;
 		this.sauterNEstPasJoue=sauterNEstPasJoue;
+		this.joueur1=joueur1;
+		this.joueur2=joueur2;
 		this.grille = new Case[taille][taille];
 		for (int i=0; i<taille; i++) {
 			for (int j=0; j<taille; j++) {
@@ -536,10 +540,10 @@ public class Damier extends JPanel{
 				frame.dispose();
 				System.out.println();
 				if (tourBlanc) {
-					System.out.println("Les noirs ont remporté la partie");
+					System.out.println(joueur2.getPseudo()+" a remporté la partie");
 				}
 				else {
-					System.out.println("Les blancs ont remporté la partie");
+					System.out.println(joueur1.getPseudo()+" a remporté la partie");
 				}
 			}
 		}

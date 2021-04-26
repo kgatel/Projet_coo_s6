@@ -107,7 +107,7 @@ Le but du jeu est alors de capturer ou d'immobiliser toutes les pièces du joueu
 
 Le but de ce projet est d'utiliser habilement les concepts de la programmation objet, c'est-à-dire savoir écrire les différents diagrammes, maîtriser l'héritage entre les classes, le polymorphisme, la gestion des interfaces ou des classes arbitraires, etc...\\
 
-Pour bien répondre au problème, nous allons d'abord regarder le \textbf{diagramme UML} et le \textbf{diagramme de cas} (Use-cases) afin de comprendre l'organisation du code.\\
+Pour bien répondre au problème, nous allons d'abord regarder le \textbf{diagramme de cas} (Use-cases) et le \textbf{diagramme de classe} (UML) afin de comprendre l'organisation du code.\\
 
 Ensuite, nous allons présenter et décrire le rôle de \textbf{chacune des classes} qui ont été nécessaires à la réalisation du projet.\\
 
@@ -116,9 +116,37 @@ Enfin, nous verrons \textbf{les différents problèmes} que nous avons pu rencon
 
 \chapter{Les diagrammes}
 
+\section{Use-cases}
+
+\begin{figure}[H]
+	\center
+	\includegraphics[width=0.7\textwidth]{./Images/Use-cases}
+	\caption{Diagramme de cas pour le jeu de dames}
+\end{figure}\vspace{0.2cm}
+
+Les joueurs commencent par choisir la variante de leur choix pour jouer au jeu de dames. Ils ont le choix entre :
+
+\begin{itemize}[label=\textbullet]
+	\item Une partie rapide : damier 8 sur 8 où chaque joueur possède 16 pièces.
+	\item Une partie classique : damier 10 sur 10 où chaque joueur possède 20 pièces.
+	\item Une partie longue : damier 12 sur 12 où chaque joueur possède 24 pièces.
+\end{itemize}\vspace{0.3cm}
+
+Ils choisissent ensuite s'ils veulent ou non obliger le saut de pièce (dans la version classique le saut est obligatoire).\\
+
+La partie se lance et les joueurs déplacent chacun leur tour une pièce de leur couleur jusqu'à ce que la partie se termine.
+
+
 \section{UML}
 
-\section{Use-cases}
+\begin{figure}[H]
+	\center
+	\includegraphics[width=1\textwidth]{./Images/UML}
+	\caption{Diagramme de classe pour le jeu de dames}
+\end{figure}\vspace{0.2cm}
+
+
+
 
 \chapter{Les classes}
 

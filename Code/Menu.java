@@ -4,7 +4,7 @@ public class Menu {
 
 	public Menu() {
 	}
-	
+		
 	public int definirTaille() {
 		int res=0;
 		String c="";
@@ -12,7 +12,7 @@ public class Menu {
 		while ( (!c.equals("a")) && (!c.equals("b")) && (!c.equals("c")) ){
 			System.out.println("Quel type de partie voulez-vous jouer ? (a/b/c)");
 			System.out.println("a- Rapide (8*8)");
-			System.out.println("b- Normale (10*10)");
+			System.out.println("b- Classique (10*10)");
 			System.out.println("c- Longue (12*12)");
 			c = clavier.nextLine();
 			System.out.println();
@@ -45,5 +45,24 @@ public class Menu {
 		return b;
 	}
 	
+	public String pseudoJoueur1() {
+		String c="";
+		Scanner clavier = new Scanner(System.in);
+		while (c.equals("")){
+			System.out.print("Pseudo joueur 1 : ");
+			c = clavier.nextLine();
+		}
+		return c;
+	}
+	
+	public String prenomJoueur2() {
+		String c="";
+		Scanner clavier = new Scanner(System.in);
+		while (c.equals("")){
+			System.out.print("Pseudo joueur 2 : ");
+			c = clavier.nextLine();
+		}
+		return c;
+	}
 	
 }
