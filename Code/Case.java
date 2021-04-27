@@ -22,7 +22,7 @@ public class Case extends JPanel{
 		super();
 		this.damier = damier;
 		this.couleur=couleurCase;
-		piece = new Pion(couleurPiece);
+		piece = new Reine(couleurPiece);
 		clique = false;
 		possibleClique = false;
 		saut = false;

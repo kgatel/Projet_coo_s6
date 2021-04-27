@@ -145,10 +145,50 @@ La partie se lance et les joueurs déplacent chacun leur tour une pièce de leur
 	\caption{Diagramme de classe pour le jeu de dames}
 \end{figure}\vspace{0.2cm}
 
+La classe \textit{Menu.java} est la première classe utilisée lors du lancement du programme. On définit ici la taille du plateau, on demande aux joueurs s'ils veulent ou non obliger les sauts et on récupère leur pseudo respectif.\\
 
+La classe \textit{Damier.java} est la classe centrale du projet. Elle permet le déplacement des pièces, l'affichage du damier et la gestion des cases. Grâce à la classe \textit{JPanel}, elle hérite de la méthode prédéfinie \textit{void paint(Graphics g)} qu'on a modifié en utilisant les méthodes \textit{void dessinerPiece()} et \textit{void dessinerCase()} et permet ainsi l'affichage du plateau.\\
+
+La méthode \textit{void afficherDeplacement(x,y : int)} va colorier les cases disponibles d'une certaine couleur pour le déplacement d'une pièce de coordonnées (x,y). On coloriera en bleu un déplacement sans saut de pièce et en rose pour un déplacement avec saut de pièce.\\
+
+
+
+La méthode \textit{void déplacer(x,y : int)} va permettre ou non le déplacement d'un pion déjà sélectionné sur une case de coordonnées (x,y). Le déplacement sera autorisé si la case a été colorée en bleu ou en rose. Si la case (x,y) est rose, on utilise la méthode \textit{boolean sautPossible} pour savoir s'il peut continuer à jouer, à savoir s'il peut sauter des pièces, le tour du joueur sera alors inchangé.
+
+A chaque saut, on utilise la méthode \textit{Coordonnees pieceMangee(x,y,i,j : int)} qui retourne les coordonnées de la pièce mangée, pour ensuite l'enlever du plateau.\\
+
+A la fin du tour, on utilise la méthode \textit{boolean peutEtreMange(x,y : int)} sur chaque pièce du joueur. S'il s'avère qu'une pièce peut être mangé au tour d'après, si l'option \textit{sautObligatoire} a été choisie par les joueurs en début de partie, tout déplacement du joueur suivant n'étant pas un saut est bloqué, un message d'erreur est affiché si nécessaire.\\
+
+La méthode \textit{boolean partieFinie()} retourne vrai si un joueur ne possède plus de pion ou ne peut plus en déplacer. La partie se termine et un message affiche le vainqueur du jeu.\\
+
+La classe \textit{Souris.java} va permettre aux joueurs de déplacer leur pièce grâce au clique de la souris. En effet, elle est issue de l'interface \textit{MouseListener} qui comprend de nombreuses méthodes prédéfinies. En modifiant la méthode \textit{void mousePressed(MouseEvent arg0)} on est capable de récupérer l'endroit où le joueur clique pour ensuite effectuer des actions sur le damier placé en attribut.
 
 
 \chapter{Les classes}
+
+\section{Case}
+
+\section{Coordonnes}
+
+\section{Couleur}
+
+\section{Damier}
+
+\section{Joueur}
+
+\section{Lanceur}
+
+\section{Menu}
+
+\section{Piece}
+
+\section{Pion}
+
+\section{Reine}
+
+\section{Souris}
+
+
 
 \chapter{Problèmes rencontrés}
 

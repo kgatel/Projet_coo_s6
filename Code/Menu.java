@@ -55,7 +55,7 @@ public class Menu {
 		return c;
 	}
 	
-	public String prenomJoueur2() {
+	public String pseudoJoueur2() {
 		String c="";
 		Scanner clavier = new Scanner(System.in);
 		while (c.equals("")){
