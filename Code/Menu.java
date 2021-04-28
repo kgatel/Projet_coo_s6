@@ -62,6 +62,7 @@ public class Menu {
 			System.out.print("Pseudo joueur 2 : ");
 			c = clavier.nextLine();
 		}
+		System.out.println("");
 		return c;
 	}
 	

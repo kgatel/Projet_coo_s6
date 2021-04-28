@@ -3,7 +3,6 @@ import java.awt.Graphics;
 
 public class Piece {
 
-	private Damier damier;
 	private Couleur couleur;
 	
 	public Piece(Couleur couleur) {

@@ -88,7 +88,7 @@ numbers=left}
 	\vspace*{\stretch{1}}
 
 	\vfill
-	{\large 16 Mai 2021}
+	{\large 23 Mai 2021}
 \end{center}
 \end{titlepage}
 
@@ -151,8 +151,6 @@ La classe \textit{Damier.java} est la classe centrale du projet. Elle permet le 
 
 La méthode \textit{void afficherDeplacement(x,y : int)} va colorier les cases disponibles d'une certaine couleur pour le déplacement d'une pièce de coordonnées (x,y). On coloriera en bleu un déplacement sans saut de pièce et en rose pour un déplacement avec saut de pièce.\\
 
-
-
 La méthode \textit{void déplacer(x,y : int)} va permettre ou non le déplacement d'un pion déjà sélectionné sur une case de coordonnées (x,y). Le déplacement sera autorisé si la case a été colorée en bleu ou en rose. Si la case (x,y) est rose, on utilise la méthode \textit{boolean sautPossible} pour savoir s'il peut continuer à jouer, à savoir s'il peut sauter des pièces, le tour du joueur sera alors inchangé.
 
 A chaque saut, on utilise la méthode \textit{Coordonnees pieceMangee(x,y,i,j : int)} qui retourne les coordonnées de la pièce mangée, pour ensuite l'enlever du plateau.\\
@@ -168,33 +166,71 @@ La classe \textit{Souris.java} va permettre aux joueurs de déplacer leur pièce
 
 \section{Case}
 
+La classe \textit{Case} possède une couleur et une pièce. Pour les cases ne contenant aucune pièce, on fixera l'attribut \textit{piece} en \textit{null}. Il est alors impératif de vérifier à chaque fois si la pièce d'une case existe ($\neq$ \textit{null}) avant de demander la couleur d'un pion ou d'une reine.
+
+
 \section{Coordonnes}
+
+La classe \textit{Coordonnees} ne possède aucune méthode. Elle a été créée dans le seul but de concevoir une fonction (présente dans la classe \textit{Damier}) qui retournerait les coordonnées d'une pièce mangée.
 
 \section{Couleur}
 
+La classe \textit{Couleur} est une classe énumération. Elle contient uniquement les deux couleurs nécessaires : Blanc et Noir.
+
 \section{Damier}
+
+La classe \textit{Damier} est la classe principale du programme. Elle regroupe l'ensemble des procédures de déplacement et d'affichage du jeu. Grâce à la classe \textit{JPanel}, elle hérite de la procédure \textit{paint()} qui va permettre ainsi en la redéfinissant d'afficher le damier et ses pièces. Ses attributs comme sa taille ou encore son booléen \textit{sautObligatoire} est fixé par l'utilisateur au début du jeu. Pour manipuler les pièces, il possède un tableau deux dimensions de \textit{Case} permettant ainsi de connaître l'ensemble du plateau à chaque instant.
 
 \section{Joueur}
 
+La classe \textit{Joueur} contient en attribut le pseudo (fixé dans la classe \textit{Menu}) et la couleur du joueur. Le premier joueur a la couleur blanche, le second la couleur noire.
+
 \section{Lanceur}
+
+La classe \textit{Lanceur} est la classe \textit{Main} de notre projet. Elle permet de lancer le jeu. Elle lance d'abord le menu puis affiche le damier et les pions afin de débuter une partie.
 
 \section{Menu}
 
+La classe \textit{Menu} demande aux joueurs le type de partie qu'ils veulent jouer afin de déterminer la taille du plateau. Elle demande également si les joueurs veulent jouer avec l'option "Saut Obligatoire". Les joueurs choisissent également leur pseudo grâce à cette classe. Cette classe sert uniquement au démarrage de la partie, avant même que le plateau soit affiché.
+
 \section{Piece}
+
+La classe \textit{Piece} est la sous-classe de tous les pions et reines du plateau. Elle contient en attribut la couleur de la pièce et contient une seule méthode qui permet de dessiner la pièce selon sa couleur et selon s'il s'agit d'un pion ou d'une reine. Elle appartient forcément à une case c'est pour cette raison qu'il n'y a pas d'attribut \textit{Coordonnees}.
 
 \section{Pion}
 
+La classe \textit{Pion} hérite de la classe \textit{Piece}. Elle ne contient pas plus de méthode ni d'attribut.
+
 \section{Reine}
 
+La classe \textit{Reine} hérite de la classe \textit{Piece}. Identiquement à la classe \textit{Pion}, elle ne contient pas plus de méthode ni d'attribut.
 \section{Souris}
 
-
+La classe \textit{Souris} est une des plus importantes du projet. En effet, elle permet aux joueurs de pouvoir jouer avec la souris. C'est elle qui va gérer l'intéraction homme-machine. Grâce à l'interface \textit{MouseListener} déjà prédéfinie, elle a accès a plusieurs méthodes dont \textit{void mousePressed(MouseEvent arg0)} qui écoute chaque pression d'un bouton sur la souris. Avec les fonctions \textit{getX} et \textit{getY} on récupère les coordonnées où le joueur clique dans la fenêtre. Ces coordonnées sont ensuite filtrés puis selon la case, la pièce indiquée des décisions sont prises.
 
 \chapter{Problèmes rencontrés}
+
+\section{Affichage}
+
+- environnement swing -> nouveau pour nous\\
+
+- Jframe, Jpanel à comprendre\\
+
+- bien utiliser l'échelle = TAILLE/taille\\
+
+- centrer les pions dans chaque case, \\
+
+-problème d'affichage (barre noire au lancement de la partie qui s'efface au premier clique) toujours irrésolue (erreur se produisant 2 lancement de partie sur 3 en moyenne)\\
+ 
+\section{Ecoute de la souris}
+
+Au début nous voulions écouter chaque case pour ne pas à convertir les coordonnées du clique, ça bugait donc on a décidé d'écouter le plateau entier puis de rediriger les coordonnées du clique pour savoir quelle case le joueur a cliqué.
+
+interface \textit{MouseListener} à comprendre -> nouveau pour nous
+
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 
-\chapter*{Annexe}
 
 \end{document}

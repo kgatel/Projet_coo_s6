@@ -1,7 +1,6 @@
 import java.awt.*;
-import javax.swing.*;
 
-public class Case extends JPanel{
+public class Case {
 
 	private Damier damier;
 	private Couleur couleur;
@@ -22,7 +21,7 @@ public class Case extends JPanel{
 		super();
 		this.damier = damier;
 		this.couleur=couleurCase;
-		piece = new Reine(couleurPiece);
+		piece = new Pion(couleurPiece);
 		clique = false;
 		possibleClique = false;
 		saut = false;
