@@ -212,21 +212,18 @@ La classe \textit{Souris} est une des plus importantes du projet. En effet, elle
 
 \section{Affichage}
 
-- environnement swing -> nouveau pour nous\\
+L'affichage du damier et des pièces fut notre première mission lors du codage du jeu.
+Il nous semblait primordial d'observer directement ce que l'on allait coder afin de remarquer les éventuelles erreurs ou oublis.\\
 
-- Jframe, Jpanel à comprendre\\
+Nous avons donc utiliser l'environnement \textit{swing} du paquet \textit{javax} afin de pouvoir afficher notre plateau. L'environnement étant tout nouveau pour nous, il nous a fallu beaucoup de temps afin de comprendre comment il s'utilise. Avec \textit{JFrame} nous pouvions ouvrir une nouvelle fenêtre et la renommer "Jeu de dames", puis avec l'héritage de la classe \textit{JPanel} la méthode \textit{paint} pouvait dessiner ce que l'on souhaitait sur la fenêtre en question.\\
 
-- bien utiliser l'échelle = TAILLE/taille\\
+Au départ nous avons fait cet affichage sur un plateau d'une taille fixée 10 par 10. Puis nous voulions étendre cet affichage pour n'importe quelle taille donnée, il nous a fallu alors introduire une échelle TAILLE/taille et comprendre comment bien l'utiliser (TAILLE correspond à la taille de la fenêtre et taille correspond à la taille du damier). Cette échelle nous a permis notamment de centrer les pièces dans chaque case du damier. Ainsi, nous pouvons fabriquer un damier de la taille que l'on souhaite (réglable dans la classe \textit{Lanceur}).\\
 
-- centrer les pions dans chaque case, \\
-
--problème d'affichage (barre noire au lancement de la partie qui s'efface au premier clique) toujours irrésolue (erreur se produisant 2 lancement de partie sur 3 en moyenne)\\
+Malheureusement, un mini problème persiste encore au niveau de l'affichage. Il s'agit d'une barre noire verticale à droite de la fenêtre qui apparaît uniquement au lancement d'une partie. Il était pour nous impossible de régler ce léger problème ne comprenant pas l'origine de l'existence. Après réflexion, nous avons compris qu'il s'agissait d'un problème de paquet et non de codage, nous avons donc abandonné la recherche de la solution. Ce problème apparaissant en moyenne 2 fois sur 3 lancement de partie disparaît au premier clique de la souris, ce qui est au final peu dérangeant.
  
 \section{Ecoute de la souris}
 
-Au début nous voulions écouter chaque case pour ne pas à convertir les coordonnées du clique, ça bugait donc on a décidé d'écouter le plateau entier puis de rediriger les coordonnées du clique pour savoir quelle case le joueur a cliqué.
-
-interface \textit{MouseListener} à comprendre -> nouveau pour nous
+L'écoute de la souris nous a également posé de nombreux problèmes. La classe \textit{MouseListener} étant également nouveau pour nous, la comprendre était pas chose facile au début du projet. En effet, nous voulions au départ écouter chaque case afin de récupérer la case cliquée directement. Nous avons alors remarqué des anomalies sur le comportement des méthodes de la classe. Nous avons donc décidé d'écouter le plateau entier puis de filtrer les coordonnées de l'endroit cliqué afin de déterminer la case correspondante.
 
 
 \chapter*{Conclusion}
