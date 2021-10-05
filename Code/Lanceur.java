@@ -11,7 +11,7 @@ public class Lanceur extends JFrame{
 		
 
 		boolean obligerLesSauts=false;;
-		int taille=8;  //taille du coté du plateau 8*8 ou 10*10 ou 12*12
+		int taille=4;  //taille du coté du plateau 8*8 ou 10*10 ou 12*12
 		boolean sauterNEstPasJoue=false;	//si je me chauffe j'élimine le pion s'il a possibilité de manger et qu'il ne le fait pas
 		
 //		taille=m.definirTaille();
@@ -25,7 +25,7 @@ public class Lanceur extends JFrame{
 		Damier damier = new Damier(f,TAILLE,taille,obligerLesSauts,sauterNEstPasJoue,j1,j2); //10 par 10 pour l'original
 		f.add(damier);
 		f.setVisible(true);
-		f.addMouseListener(new Souris(damier));		
+		f.addMouseListener(new Souris(damier));
 	}
 	
 }

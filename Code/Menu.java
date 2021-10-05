@@ -49,7 +49,7 @@ public class Menu {
 		String c="";
 		Scanner clavier = new Scanner(System.in);
 		while (c.equals("")){
-			System.out.print("Pseudo joueur 1 : ");
+			System.out.print("Pseudo joueur 1 (Blanc) : ");
 			c = clavier.nextLine();
 		}
 		return c;
@@ -59,7 +59,7 @@ public class Menu {
 		String c="";
 		Scanner clavier = new Scanner(System.in);
 		while (c.equals("")){
-			System.out.print("Pseudo joueur 2 : ");
+			System.out.print("Pseudo joueur 2 (Noir) : ");
 			c = clavier.nextLine();
 		}
 		System.out.println("");
